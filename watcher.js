@@ -1,3 +1,17 @@
+/**
+ * A file watcher that will re-run a script when specified files change.
+ *
+ * Usage:
+ *   watcher <file_to_run> [<watch_file_or_dir>, [<watch_file_or_dir>, ...]]
+ *
+ * Example:
+ *   # Start index.js, and watch index.js, server.js, and the lib folder for changes.
+ *   #
+ *   $ node watcher index.js server.js lib
+ *
+ * Author: James Abney
+ * Date: 2018-Sep-03
+ */
 const cp = require('child_process')
 const fs = require('fs')
 
