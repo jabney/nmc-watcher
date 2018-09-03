@@ -74,7 +74,10 @@ function start(startFile, paths) {
   })
 }
 
+// Get the js file to run.
 const file = process.argv[2]
+
+// Get the paths to watch.
 const paths = process.argv.slice(2)
 
 // Start and watch.
