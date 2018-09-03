@@ -73,7 +73,7 @@ function spawn(startFile) {
     conlog(b.toString(), 'output')
   })
   process.stderr.on('data', (b) => {
-    conlog(b.toString, 'error')
+    conlog(b.toString(), 'error')
   })
 
   return process
