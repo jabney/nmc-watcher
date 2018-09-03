@@ -34,6 +34,8 @@ This script uses `fs.watch` which receives multiple change events when a file ch
 
 Some circumstances may cause the server to be left running when `watcher` exits due to a crash. When this happens you'll get a `EADDRINUSE` or similar error. To fix this you'll need to kill the process manually. On linux/unix you should be able to use `lsof` to get the ID of a process at a given port: 
 
+If the server crashes, you will need to restart `watcher`. I will look into how to make this automatic in the future.
+
 ```bash
 lsof -i:3000
 ```
