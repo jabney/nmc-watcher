@@ -17,6 +17,8 @@ const fs = require('fs')
 
 const RESTART_DELAY_MS = 2000
 
+const IS_CLI = !module.parent
+
 // https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
 const seq = {
   reset: '\x1b[0m',
@@ -32,6 +34,8 @@ const seq = {
   white: '\x1b[37m',
 }
 
+let useColors = false
+
 /**
  * Log a message to the console in an app-specific way.
  *
@@ -40,7 +44,7 @@ const seq = {
  */
 function conlog(message, type) {
   if (!useColors) {
-    return console.log(message)
+    return type === 'error' ? console.error(message) : console.log(message)
   }
 
   switch (type) {
@@ -131,20 +135,26 @@ function start(startFile, paths) {
   })
 }
 
-// Get command line arguments.
-const args = process.argv.slice(2)
+function main() {
+  // Get command line arguments.
+  const args = process.argv.slice(2)
 
-// Supported command line switches.
-const switches = ['-n', '--no-colors']
+  // Supported command line switches.
+  const switches = ['-n', '--no-colors']
 
-// Set use colors flag.
-const useColors = args.filter(x => switches.includes(x)).length === 0
+  // Get args that aren't switches.
+  const fileArgs = args.filter(x => !x.startsWith('-'))
 
-// Get args that aren't switches.
-const fileArgs = args.filter(x => !x.startsWith('-'))
+  // Get the js file to run.
+  const file = fileArgs[0]
 
-// Get the js file to run.
-const file = fileArgs[0]
+  // Set use colors flag.
+  useColors = args.filter(x => switches.includes(x)).length === 0
 
-// Start and watch.
-start(file, fileArgs)
+  // Start and watch.
+  start(file, fileArgs)
+}
+
+if (IS_CLI) {
+  main()
+}
