@@ -39,9 +39,9 @@ function restart(startFile, process) {
  * @param {string[]} paths
  */
 function start(startFile, paths) {
-  const reFilename = /^(?:\.\/)?(.+?)(?:\.js)?$/
-
-  console.log(`Starting ${startFile.replace(reFilename, '$1')} ...`)
+  const reFilename = /^(?:\.\/)?(.+?)$/
+  const file = startFile.replace(reFilename, '$1')
+  console.log(`Starting ${file}, watching ${paths.join(', ')} ...`)
 
   // Start the process.
   let process = spawn(startFile)
