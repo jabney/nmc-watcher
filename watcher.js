@@ -17,6 +17,21 @@ const fs = require('fs')
 
 const RESTART_DELAY_MS = 2000
 
+// https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
+const con = {
+  reset: '\x1b[0m',
+  bright: '\x1b[1m',
+  dim: '\x1b[2m',
+  black: '\x1b[30m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  magenta: '\x1b[35m',
+  cyan: '\x1b[36m',
+  white: '\x1b[37m',
+}
+
 /**
  * Spawn and return the process.
  *
@@ -25,8 +40,13 @@ const RESTART_DELAY_MS = 2000
 function spawn(startFile) {
   const process = cp.spawn('node', [startFile])
 
-  process.stdout.on('data', (b) => console.log(b.toString()))
-  process.stderr.on('data', (b) => console.error(b.toString()))
+  // Bind to output streams and color the console messages.
+  process.stdout.on('data', (b) => {
+    console.log(con.green, con.bright, b.toString(), con.reset)
+  })
+  process.stderr.on('data', (b) => {
+    console.error(con.red, con.bright, b.toString(), con.reset)
+  })
 
   return process
 }
@@ -39,7 +59,7 @@ function spawn(startFile) {
  */
 function restart(startFile, process) {
   return new Promise((resolve, reject) => {
-    console.log('Restarting...')
+    console.log(con.yellow, 'Restarting...', con.reset, '\n')
 
     process.kill()
 
@@ -59,7 +79,11 @@ function start(startFile, paths) {
   const reFilename = /^(?:\.\/)?(.+?)$/
   const file = startFile.replace(reFilename, '$1')
 
-  console.log(`Starting ${file}, watching ${paths.join(', ')} ...`)
+  console.log(
+    con.yellow,
+    `Starting ${file}, watching ${paths.join(', ')} ...`,
+    con.reset,
+    '\n')
 
   // Start the process.
   let process = spawn(startFile)
