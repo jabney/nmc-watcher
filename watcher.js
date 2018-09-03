@@ -18,7 +18,7 @@ const fs = require('fs')
 const RESTART_DELAY_MS = 2000
 
 // https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
-const con = {
+const seq = {
   reset: '\x1b[0m',
   bright: '\x1b[1m',
   dim: '\x1b[2m',
@@ -33,6 +33,27 @@ const con = {
 }
 
 /**
+ * Log a message to the console in an app-specific way.
+ *
+ * @param {string} message
+ * @param {'app'|'output'|'error'} type
+ */
+function conlog(message, type) {
+  if (!useColors) {
+    return console.log(message)
+  }
+
+  switch (type) {
+    case 'app':
+      return console.log(seq.yellow, message, seq.reset, '\n')
+    case 'output':
+      return console.log(seq.green, seq.bright, message, seq.reset)
+    case 'error':
+      return console.error(seq.red, seq.bright, message, seq.reset)
+  }
+}
+
+/**
  * Spawn and return the process.
  *
  * @param {string} startFile
@@ -42,10 +63,10 @@ function spawn(startFile) {
 
   // Bind to output streams and color the console messages.
   process.stdout.on('data', (b) => {
-    console.log(con.green, con.bright, b.toString(), con.reset)
+    conlog(b.toString(), 'output')
   })
   process.stderr.on('data', (b) => {
-    console.error(con.red, con.bright, b.toString(), con.reset)
+    conlog(b.toString, 'error')
   })
 
   return process
@@ -59,7 +80,7 @@ function spawn(startFile) {
  */
 function restart(startFile, process) {
   return new Promise((resolve, reject) => {
-    console.log(con.yellow, 'Restarting...', con.reset, '\n')
+    conlog('Restarting...', 'app')
 
     process.kill()
 
@@ -79,11 +100,7 @@ function start(startFile, paths) {
   const reFilename = /^(?:\.\/)?(.+?)$/
   const file = startFile.replace(reFilename, '$1')
 
-  console.log(
-    con.yellow,
-    `Starting ${file}, watching ${paths.join(', ')} ...`,
-    con.reset,
-    '\n')
+  conlog(`Starting ${file}, watching ${paths.join(', ')} ...`, 'app')
 
   // Start the process.
   let process = spawn(startFile)
@@ -114,11 +131,20 @@ function start(startFile, paths) {
   })
 }
 
-// Get the js file to run.
-const file = process.argv[2]
+// Get command line arguments.
+const args = process.argv.slice(2)
 
-// Get the paths to watch.
-const paths = process.argv.slice(2)
+// Supported command line switches.
+const switches = ['-n', '--no-colors']
+
+// Set use colors flag.
+const useColors = args.filter(x => switches.includes(x)).length === 0
+
+// Get args that aren't switches.
+const fileArgs = args.filter(x => !x.startsWith('-'))
+
+// Get the js file to run.
+const file = fileArgs[0]
 
 // Start and watch.
-start(file, paths)
+start(file, fileArgs)
