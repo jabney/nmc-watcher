@@ -2,7 +2,10 @@
  * A file watcher that will re-run a script when specified files change.
  *
  * Usage:
- *   watcher <file_to_run> [<watch_file_or_dir>, [<watch_file_or_dir>, ...]]
+ *   watcher [options] <file_to_run> [<watch_file_or_dir>, [<watch_file_or_dir>, ...]]
+ *
+ * Options:
+ *   -n | --no-colors: don't output colors
  *
  * Example:
  *   # Start index.js, and watch index.js, server.js, and the lib folder for changes.
