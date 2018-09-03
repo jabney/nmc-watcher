@@ -1,6 +1,8 @@
 const cp = require('child_process')
 const fs = require('fs')
 
+const RESTART_DELAY_MS = 2000
+
 /**
  * Spawn and return the process.
  *
@@ -29,7 +31,7 @@ function restart(startFile, process) {
 
     setTimeout(async () => {
       resolve(spawn(startFile))
-    }, 1000)
+    }, RESTART_DELAY_MS)
   })
 }
 
