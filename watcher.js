@@ -41,8 +41,10 @@ function restart(startFile, process) {
  * @param {string[]} paths
  */
 function start(startFile, paths) {
+  // Remove leading './' if any.
   const reFilename = /^(?:\.\/)?(.+?)$/
   const file = startFile.replace(reFilename, '$1')
+
   console.log(`Starting ${file}, watching ${paths.join(', ')} ...`)
 
   // Start the process.
