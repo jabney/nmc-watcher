@@ -49,6 +49,6 @@ node    4132 james   11u  IPv6 0x3ac7180311e78f49      0t0  TCP *:hbci (LISTEN)
 ```
 
 ```bash
-kill 4231
+kill 4132
 ```
 
