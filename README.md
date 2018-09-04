@@ -40,7 +40,7 @@ Some circumstances may cause the server to be left running when `watcher` exits 
 
 
 ```bash
-lsof -i:3000
+$ lsof -i:3000
 ```
 
 ```
@@ -49,6 +49,6 @@ node    4132 james   11u  IPv6 0x3ac7180311e78f49      0t0  TCP *:hbci (LISTEN)
 ```
 
 ```bash
-kill 4132
+$ kill 4132
 ```
 
