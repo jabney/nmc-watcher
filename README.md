@@ -28,7 +28,7 @@ $ node watcher --no-colors index.js lib
 ## Notes
 Developed on node `8.9.2` and uses `async/await`, so you'll need at least a node version that supports `async/await`.
 
-If the server crashes, you will either need to restart `watcher`, or save a source file in order to restart the process.
+If the server crashes, you will need to save a source file in order to restart the process.
 
 ## Issues
 
