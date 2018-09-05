@@ -52,11 +52,11 @@ function conlog(message, type) {
 
   switch (type) {
     case 'app':
-      return console.log(seq.yellow, message, seq.reset, '\n')
+      return console.log(`${seq.yellow}${message}${seq.reset}`, '\n')
     case 'output':
-      return console.log(seq.green, seq.bright, message, seq.reset)
+      return console.log(` ${seq.green}${seq.bright}${message}${seq.reset}`)
     case 'error':
-      return console.error(seq.red, seq.bright, message, seq.reset)
+      return console.log(` ${seq.red}${seq.bright}${message}${seq.reset}`, '\n')
   }
 }
 
@@ -83,11 +83,12 @@ function spawn(startFile) {
  * Kill and restart the process.
  *
  * @param {string} startFile
+ * @param {string} changedFile
  * @param {cp.ChildProcess} process
  */
-function restart(startFile, process) {
+function restart(startFile, changedFile, process) {
   return new Promise((resolve, reject) => {
-    conlog('Restarting...', 'app')
+    conlog(`Change detected in ${seq.cyan}${changedFile}. ${seq.yellow}Restarting...`, 'app')
 
     process.kill()
 
@@ -107,7 +108,7 @@ function start(startFile, paths) {
   const reFilename = /^(?:\.\/)?(.+?)$/
   const file = startFile.replace(reFilename, '$1')
 
-  conlog(`Starting ${file}, watching ${paths.join(', ')} ...`, 'app')
+  conlog(`Starting ${seq.cyan}${file},${seq.yellow} watching ${seq.cyan}${paths.join(', ')} ...`, 'app')
 
   // Start the process.
   let process = spawn(startFile)
@@ -129,7 +130,7 @@ function start(startFile, paths) {
         restarting = true
 
         // Restart the process.
-        process = await restart(startFile, process)
+        process = await restart(startFile, filename, process)
 
         // Unlock
         restarting = false
@@ -145,14 +146,14 @@ function main() {
   // Supported command line switches.
   const switches = ['-n', '--no-colors']
 
+  // Set use colors flag.
+  useColors = args.filter(x => switches.includes(x)).length === 0
+
   // Get args that aren't switches.
   const fileArgs = args.filter(x => !x.startsWith('-'))
 
   // Get the js file to run.
   const file = fileArgs[0]
-
-  // Set use colors flag.
-  useColors = args.filter(x => switches.includes(x)).length === 0
 
   // Start and watch.
   start(file, fileArgs)
