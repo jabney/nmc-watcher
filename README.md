@@ -1,7 +1,7 @@
 # nmc-watcher
 A basic process runner/restarter for node, with no external dependencies, intended to automatically restart a server when a source file changes.
 
-![Watcher Output](watcher.jpg "Watcher")
+![Watcher Output](watcher.png "Watcher")
 
 ## Usage
 
