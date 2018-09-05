@@ -49,15 +49,15 @@ function conlog(message, type) {
   switch (type) {
     case 'app':
       return useColors
-        ? console.log(`${seq.yellow}${message}${seq.reset}`, '\n')
+        ? console.log(`${seq.reset}${seq.yellow}${message}${seq.reset}`, '\n')
         : console.log(`${message}`, '\n')
     case 'output':
       return useColors
-        ? console.log(` ${seq.green}${seq.bright}${message}${seq.reset}`)
+        ? console.log(` ${seq.reset}${seq.green}${message}${seq.reset}`)
         : console.log(` ${message}`)
     case 'error':
       return useColors
-        ? console.log(` ${seq.red}${seq.bright}${message}${seq.reset}`, '\n')
+        ? console.log(` ${seq.reset}${seq.red}${message}${seq.reset}`)
         : console.log(` ${message}`, '\n')
   }
 }
