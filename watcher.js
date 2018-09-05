@@ -106,11 +106,7 @@ function restart(startFile, changedFile, process) {
  * @param {string[]} paths
  */
 function start(startFile, paths) {
-  // Remove leading './' if any.
-  const reFilename = /^(?:\.\/)?(.+?)$/
-  const file = startFile.replace(reFilename, '$1')
-
-  conlog(`Starting ${file}, watching ${paths.join(', ')} ...`, 'app')
+  conlog(`Starting ${startFile}, watching ${paths.join(', ')} ...`, 'app')
 
   // File watch options.
   const options = {
