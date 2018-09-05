@@ -46,17 +46,19 @@ let useColors = false
  * @param {'app'|'output'|'error'} type
  */
 function conlog(message, type) {
-  if (!useColors) {
-    return type === 'error' ? console.error(message) : console.log(message)
-  }
-
   switch (type) {
     case 'app':
-      return console.log(`${seq.yellow}${message}${seq.reset}`, '\n')
+      return useColors
+        ? console.log(`${seq.yellow}${message}${seq.reset}`, '\n')
+        : console.log(`${message}`, '\n')
     case 'output':
-      return console.log(` ${seq.green}${seq.bright}${message}${seq.reset}`)
+      return useColors
+        ? console.log(` ${seq.green}${seq.bright}${message}${seq.reset}`)
+        : console.log(` ${message}`)
     case 'error':
-      return console.log(` ${seq.red}${seq.bright}${message}${seq.reset}`, '\n')
+      return useColors
+        ? console.log(` ${seq.red}${seq.bright}${message}${seq.reset}`, '\n')
+        : console.log(` ${message}`, '\n')
   }
 }
 
@@ -88,7 +90,7 @@ function spawn(startFile) {
  */
 function restart(startFile, changedFile, process) {
   return new Promise((resolve, reject) => {
-    conlog(`Change detected in ${seq.cyan}${changedFile}. ${seq.yellow}Restarting...`, 'app')
+    conlog(`Change detected in. Restarting...`, 'app')
 
     process.kill()
 
@@ -108,7 +110,7 @@ function start(startFile, paths) {
   const reFilename = /^(?:\.\/)?(.+?)$/
   const file = startFile.replace(reFilename, '$1')
 
-  conlog(`Starting ${seq.cyan}${file},${seq.yellow} watching ${seq.cyan}${paths.join(', ')} ...`, 'app')
+  conlog(`Starting, watching ${paths.join(', ')} ...`, 'app')
 
   // Start the process.
   let process = spawn(startFile)
