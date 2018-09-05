@@ -90,7 +90,7 @@ function spawn(startFile) {
  */
 function restart(startFile, changedFile, process) {
   return new Promise((resolve, reject) => {
-    conlog(`Change detected in. Restarting...`, 'app')
+    conlog(`Change detected in ${changedFile}. Restarting...`, 'app')
 
     process.kill()
 
@@ -110,7 +110,7 @@ function start(startFile, paths) {
   const reFilename = /^(?:\.\/)?(.+?)$/
   const file = startFile.replace(reFilename, '$1')
 
-  conlog(`Starting, watching ${paths.join(', ')} ...`, 'app')
+  conlog(`Starting ${file}, watching ${paths.join(', ')} ...`, 'app')
 
   // Start the process.
   let process = spawn(startFile)
