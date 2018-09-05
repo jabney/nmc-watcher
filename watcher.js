@@ -112,13 +112,13 @@ function start(startFile, paths) {
 
   conlog(`Starting ${file}, watching ${paths.join(', ')} ...`, 'app')
 
-  // Start the process.
-  let process = spawn(startFile)
-
   // File watch options.
   const options = {
     recursive: true
   }
+
+  // Start the process.
+  let process = spawn(startFile)
 
   // Track when we're actively restarting.
   let restarting = false
