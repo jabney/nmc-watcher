@@ -11,7 +11,7 @@ watcher [options] <file_to_run> [<watch_file_or_dir>, [<watch_file_or_dir>, ...]
 
 ### Options
 
-`-n` or `--no-colors`: don't output with colors
+`-n` or `--no-colors`: output without colors
 
 ### Examples
 
