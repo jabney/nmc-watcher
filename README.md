@@ -32,6 +32,35 @@ Developed on node `8.9.2` and uses `async/await`, so you'll need at least a node
 
 If the server crashes, you will need to save a source file in order to restart the process.
 
+To make using `watcher` even more handy you can start it with a script:
+
+**Create a watch script file**
+
+```bash
+$ touch watch
+
+$ chmod u+x watch
+```
+
+**Edit the watch script and add the following content**
+
+```bash
+#! /bin/sh
+
+node watcher index.js server.js lib
+```
+
+**Run it**
+
+```bash
+$ ./watch
+
+Starting index.js, watching index.js, server.js, lib ...
+
+ (HTTP) Listening on port 3000
+ (HTTPS) Listening on port 3001
+```
+
 ## Issues
 
 This script uses `fs.watch` which receives multiple change events when a file changes. `watcher` waits 2 seconds after killing the process before restarting it, but sometimes the change events are more than 2 seconds apart so changing a file will occasionally cause duplicate restarts. This shouldn't be much of a problem in practice.
