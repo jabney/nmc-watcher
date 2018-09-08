@@ -65,7 +65,7 @@ Starting index.js, watching index.js, server.js, lib ...
 
 This script uses `fs.watch` which receives multiple change events when a file changes. `watcher` waits 2 seconds after killing the process before restarting it, but sometimes the change events are more than 2 seconds apart so changing a file will occasionally cause duplicate restarts. This shouldn't be much of a problem in practice.
 
-Some circumstances may cause the server to be left running when `watcher` exits due to a crash. When this happens you may get a `EADDRINUSE` or similar error when trying to restart `watcher`. To fix this you'll need to kill the process manually. On linux/unix you should be able to use `lsof` to get the ID of a process at a given port:
+Some rare circumstances may cause the server to be left running when `watcher` exits due to a crash. When this happens you may get a `EADDRINUSE` or similar error when trying to restart `watcher`. To fix this you'll need to kill the process manually. On linux/unix you should be able to use `lsof` to get the ID of a process at a given port:
 
 
 ```bash
