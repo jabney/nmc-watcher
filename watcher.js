@@ -85,7 +85,7 @@ function spawn(startFile) {
   // Remove existing listeners.
   process.removeAllListeners()
 
-  // Add new uncaught listener.
+  // Detect if this process crashes, then kill the child process.
   process.on('uncaughtException', onUncaught.bind(proc))
 
   // Bind to output streams and color the console messages.
@@ -113,14 +113,10 @@ function restart(startFile, changedFile, proc) {
     // Kill the process.
     proc.kill()
 
-    // Wait for the process to exit.
-    proc.on('exit', (data) => {
-      // After a delay, restart the process.
-      setTimeout(async () => {
-        resolve(spawn(startFile))
-      }, RESTART_DELAY_MS)
-    })
-
+    // After a delay, restart the process.
+    setTimeout(async () => {
+      resolve(spawn(startFile))
+    }, RESTART_DELAY_MS)
   })
 }
 
