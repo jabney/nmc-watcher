@@ -18,7 +18,7 @@
 const cp = require('child_process')
 const fs = require('fs')
 
-const RESTART_DELAY_MS = 2000
+const RESTART_DELAY_MS = 1500
 
 const IS_CLI = !module.parent
 
@@ -63,22 +63,40 @@ function conlog(message, type) {
 }
 
 /**
+ * Kill a child process and throw the given error.
+ *
+ * @param {Error} error
+ * @this {cp.ChildProcess}
+ */
+function onUncaught(error) {
+  this.kill()
+  throw error
+}
+
+/**
  * Spawn and return the process.
  *
  * @param {string} startFile
  */
 function spawn(startFile) {
-  const process = cp.spawn('node', [startFile])
+  // Start the child process.
+  const proc = cp.spawn('node', [startFile])
+
+  // Remove existing listeners.
+  process.removeAllListeners()
+
+  // Add new uncaught listener.
+  process.on('uncaughtException', onUncaught.bind(proc))
 
   // Bind to output streams and color the console messages.
-  process.stdout.on('data', (b) => {
+  proc.stdout.on('data', (b) => {
     conlog(b.toString(), 'output')
   })
-  process.stderr.on('data', (b) => {
+  proc.stderr.on('data', (b) => {
     conlog(b.toString(), 'error')
   })
 
-  return process
+  return proc
 }
 
 /**
@@ -86,17 +104,23 @@ function spawn(startFile) {
  *
  * @param {string} startFile
  * @param {string} changedFile
- * @param {cp.ChildProcess} process
+ * @param {cp.ChildProcess} proc
  */
-function restart(startFile, changedFile, process) {
+function restart(startFile, changedFile, proc) {
   return new Promise((resolve, reject) => {
     conlog(`Change detected in ${changedFile}. Restarting...`, 'app')
 
-    process.kill()
+    // Kill the process.
+    proc.kill()
 
-    setTimeout(async () => {
-      resolve(spawn(startFile))
-    }, RESTART_DELAY_MS)
+    // Wait for the process to exit.
+    proc.on('exit', (data) => {
+      // After a delay, restart the process.
+      setTimeout(async () => {
+        resolve(spawn(startFile))
+      }, RESTART_DELAY_MS)
+    })
+
   })
 }
 
