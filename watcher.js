@@ -53,12 +53,12 @@ function conlog(message, type) {
         : process.stdout.write(`\n${message}\n\n`)
     case 'output':
       return useColors
-        ? process.stdout.write(` ${seq.reset}${seq.green}${message}${seq.reset}`)
-        : process.stdout.write(` ${message}`)
+        ? process.stdout.write(`${seq.reset}${seq.green}${message}${seq.reset}`)
+        : process.stdout.write(`${message}`)
     case 'error':
       return useColors
-        ? process.stderr.write(` ${seq.reset}${seq.red}${message}${seq.reset}`)
-        : process.stderr.write(` ${message}`)
+        ? process.stderr.write(`${seq.reset}${seq.red}${message}${seq.reset}`)
+        : process.stderr.write(`${message}`)
   }
 }
 
