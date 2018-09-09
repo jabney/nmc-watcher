@@ -114,7 +114,7 @@ function restart(startFile, changedFile, proc) {
     proc.kill()
 
     // After a delay, restart the process.
-    setTimeout(async () => {
+    setTimeout(() => {
       resolve(spawn(startFile))
     }, RESTART_DELAY_MS)
   })
